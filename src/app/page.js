@@ -1,5 +1,10 @@
+// app/page.js (ou Home.js em algumas versões do Next.js)
 'use client'
 import { useState } from "react";
+import NavBar from "@/components/NavBar";
+import Card from "@/components/Card";
+import Footer from "@/components/Footer";
+import Search from "@/components/Search";
 
 export default function Home() {
   const [isDonateFormOpen, setDonateFormOpen] = useState(false);
@@ -16,12 +21,10 @@ export default function Home() {
       contact: "maria@email.com",
       image: "https://via.placeholder.com/150"
     },
-    // ... Adicione outros itens conforme necessário
+    // Outros itens
   ];
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value.toLowerCase());
-  };
+  const handleSearch = (e) => setSearchTerm(e.target.value.toLowerCase());
 
   const openForm = () => setDonateFormOpen(true);
   const closeForm = () => setDonateFormOpen(false);
@@ -34,20 +37,8 @@ export default function Home() {
 
   return (
     <div className="bg-gray-50 font-sans">
-      {/* Cabeçalho */}
-      <header className="bg-green-600 text-white py-5 shadow-lg">
-        <div className="container mx-auto flex justify-between items-center px-4">
-          <h1 className="text-3xl font-bold">Plataforma de Doações</h1>
-          <nav>
-            <a href="#home" className="text-white px-4 hover:text-gray-200">Início</a>
-            <a href="#about" className="text-white px-4 hover:text-gray-200">Sobre</a>
-            <a href="#donate" className="text-white px-4 hover:text-gray-200">Doar</a>
-            <a href="#contact" className="text-white px-4 hover:text-gray-200">Contato</a>
-          </nav>
-        </div>
-      </header>
-
-      {/* Seção Home */}
+      <NavBar />
+      
       <section id="home" className="py-12 bg-cover bg-center text-center" style={{ backgroundImage: "url('https://via.placeholder.com/1200x400')" }}>
         <div className="bg-black bg-opacity-50 py-12">
           <h2 className="text-4xl font-bold text-white">Bem-vindo à Plataforma de Doações</h2>
@@ -56,26 +47,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Seção de Busca e Itens para Doação */}
       <section id="donate" className="py-10">
         <div className="container mx-auto text-center px-4">
           <h2 className="text-3xl font-semibold text-gray-800 mb-6">Itens para Doação</h2>
-          <input type="text" placeholder="Buscar por itens..." value={searchTerm} onChange={handleSearch} className="w-full md:w-1/2 px-4 py-2 mb-8 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600" />
+          <Search searchTerm={searchTerm} handleSearch={handleSearch} />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6" id="itemList">
             {items.filter(item => item.title.toLowerCase().includes(searchTerm)).map((item, index) => (
-              <div key={index} className="bg-white p-4 rounded-lg shadow-lg transform hover:scale-105 transition ease-in-out duration-200">
-                <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-lg" />
-                <h3 className="text-lg font-semibold text-gray-800 mt-4">{item.title}</h3>
-                <p className="text-sm text-gray-500">Doador: {item.donor}</p>
-                <button onClick={() => viewDetails(item)} className="mt-4 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition ease-in-out">Ver Detalhes</button>
-              </div>
+              <Card key={index} item={item} viewDetails={viewDetails} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Modal de Detalhes do Item */}
       {isDetailsModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg w-80">
@@ -89,7 +73,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Modal de Doação */}
       {isDonateFormOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg w-80">
@@ -108,6 +91,8 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 }
