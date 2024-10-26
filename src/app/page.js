@@ -1,4 +1,4 @@
-// app/page.js (ou Home.js em algumas versões do Next.js)
+// app/page.js ou Home.js
 'use client'
 import { useState } from "react";
 import NavBar from "@/components/NavBar";
@@ -12,6 +12,7 @@ export default function Home() {
   const [modalContent, setModalContent] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Lista de itens para doação, com mais detalhes
   const items = [
     {
       title: "Roupas de Inverno",
@@ -19,9 +20,21 @@ export default function Home() {
       location: "Centro, São Paulo",
       description: "Estou doando essas roupas para ajudar quem precisa se aquecer nesse inverno.",
       contact: "maria@email.com",
+      estado: "Bom estado",
+      endereco: "Rua das Flores, 123, Centro",
       image: "https://via.placeholder.com/150"
     },
-    // Outros itens
+    {
+      title: "Cobertores",
+      donor: "João Souza",
+      location: "Jardins, São Paulo",
+      description: "Cobertores novos e usados para quem está com frio.",
+      contact: "joao@email.com",
+      estado: "Usado, mas em bom estado",
+      endereco: "Avenida Paulista, 456, Jardins",
+      image: "https://via.placeholder.com/150"
+    },
+    // Adicione outros itens conforme necessário
   ];
 
   const handleSearch = (e) => setSearchTerm(e.target.value.toLowerCase());
@@ -53,41 +66,57 @@ export default function Home() {
           <Search searchTerm={searchTerm} handleSearch={handleSearch} />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6" id="itemList">
-            {items.filter(item => item.title.toLowerCase().includes(searchTerm)).map((item, index) => (
-              <Card key={index} item={item} viewDetails={viewDetails} />
-            ))}
+            {items
+              .filter(item => item.title.toLowerCase().includes(searchTerm))
+              .map((item, index) => (
+                <Card key={index} item={item} viewDetails={viewDetails} />
+              ))}
           </div>
         </div>
       </section>
 
+      {/* Modal de Detalhes do Item */}
       {isDetailsModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg w-80">
-            <span className="text-red-500 font-bold text-lg cursor-pointer float-right" onClick={closeDetails}>&times;</span>
-            <h2 className="text-2xl font-semibold mb-2">{modalContent.title}</h2>
-            <p className="text-sm text-gray-600 mb-2">{modalContent.location}</p>
-            <p className="text-sm text-gray-600 mb-2">Doador(a): {modalContent.donor}</p>
-            <p className="text-gray-800 mb-4">{modalContent.description}</p>
-            <p className="text-gray-600">Contato: {modalContent.contact}</p>
-          </div>
-        </div>
-      )}
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-80 md:w-96 relative">
+            <span
+              className="text-red-500 font-bold text-lg cursor-pointer absolute top-2 right-4"
+              onClick={closeDetails}
+            >
+              &times;
+            </span>
 
-      {isDonateFormOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg w-80">
-            <span className="text-red-500 font-bold text-lg cursor-pointer float-right" onClick={closeForm}>&times;</span>
-            <h2 className="text-2xl font-semibold mb-4">Cadastro de Item para Doação</h2>
-            <form className="space-y-4">
-              <input type="text" placeholder="Nome do Item" required className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600" />
-              <select className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600">
-                <option value="roupas">Roupas</option>
-                <option value="alimentos">Alimentos</option>
-                <option value="higiene">Produtos de Higiene</option>
-              </select>
-              <textarea placeholder="Descrição" className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600"></textarea>
-              <button type="submit" className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition ease-in-out">Adicionar</button>
-            </form>
+            <img
+              src={modalContent.image}
+              alt={modalContent.title}
+              className="w-full h-48 object-cover rounded-lg mb-4"
+            />
+            
+            <h2 className="text-2xl font-semibold mb-2">{modalContent.title}</h2>
+            <p className="text-gray-600 text-sm mb-2">Localização: {modalContent.location}</p>
+            <p className="text-gray-600 text-sm mb-2">Estado do Item: {modalContent.estado}</p>
+            <p className="text-gray-600 text-sm mb-2">Endereço: {modalContent.endereco}</p>
+            <p className="text-gray-800 mb-4">{modalContent.description}</p>
+            
+            <div className="text-gray-600 text-sm mb-4">
+              <p><strong>Doador:</strong> {modalContent.donor}</p>
+              <p><strong>Contato:</strong> {modalContent.contact}</p>
+            </div>
+
+            <div className="flex justify-between mt-6">
+              <button
+                className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition ease-in-out"
+                onClick={() => alert(`Você mostrou interesse no item ${modalContent.title}!`)}
+              >
+                Quero
+              </button>
+              <button
+                className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition ease-in-out"
+                onClick={() => alert(`Iniciando chat com ${modalContent.donor}...`)}
+              >
+                Chat
+              </button>
+            </div>
           </div>
         </div>
       )}
