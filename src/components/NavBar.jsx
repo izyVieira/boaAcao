@@ -9,6 +9,7 @@ export default function NavBar() {
             <a href="#about" className="text-white px-4 hover:text-gray-200">Sobre</a>
             <a href="#donate" className="text-white px-4 hover:text-gray-200">Doar</a>
             <a href="#contact" className="text-white px-4 hover:text-gray-200">Contato</a>
+            <a href="/login" className="text-white px-4 hover:text-gray-200">Login</a>
           </nav>
         </div>
       </header>
