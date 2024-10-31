@@ -13,7 +13,7 @@ export default function NavBar() {
           <Link href="/about" className="text-white px-4 hover:text-gray-200">
             Sobre
           </Link>
-          <Link href="/#donate" className="text-white px-4 hover:text-gray-200">
+          <Link href="/itemCreate" className="text-white px-4 hover:text-gray-200">
             Doar
           </Link>
           <Link href="/#contact" className="text-white px-4 hover:text-gray-200">
